@@ -10,4 +10,14 @@ function fibonacci(endNumber) {
   return numsFibonacci;
 }
 
-console.log(fibonacci(610));
+function difference(firstArray, secondArray) {
+  const union = (setA, setB) => {
+    setB.forEach((el) => setA.add(el));
+    return setA;
+  };
+  const setA = new Set(firstArray.flat(Infinity));
+  const setB = new Set(secondArray.flat(Infinity));
+  return union(setA, setB);
+}
+
+console.log(difference([1, 2, 3], [100, 2, 1, 10]));
