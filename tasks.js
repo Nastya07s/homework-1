@@ -35,4 +35,8 @@ function transformObject(object) {
   return result;
 }
 
-console.log(transformObject({red: "#FF0000", green: "#00FF00", white: "#FFFFFF"}));
+function createPairsFromObject(object) {
+  return Object.entries(object);
+}
+
+console.log(createPairsFromObject({red: "#FF0000", green: "#00FF00", white: "#FFFFFF"}));
