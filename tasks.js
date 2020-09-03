@@ -39,4 +39,15 @@ function createPairsFromObject(object) {
   return Object.entries(object);
 }
 
-console.log(createPairsFromObject({red: "#FF0000", green: "#00FF00", white: "#FFFFFF"}));
+function uncamelize(string, separator = ' ') {
+  let result = '';
+  string.split('').forEach((char) => {
+    const charCode = char.charCodeAt();
+    if (charCode > 64 && charCode < 91) {
+      result += separator + String.fromCharCode(charCode + 32);
+    } else result += char;
+  })
+  return result;
+}
+
+console.log(uncamelize('helloWorld','_'));
