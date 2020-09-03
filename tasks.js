@@ -20,4 +20,9 @@ function difference(firstArray, secondArray) {
   return union(setA, setB);
 }
 
-console.log(difference([1, 2, 3], [100, 2, 1, 10]));
+function caseInsensitiveSearch(text, searchText) {
+  const regExp = new RegExp(searchText, 'i');
+  return text.search(regExp) === -1 ? 'Not Matched' : 'Matched';
+}
+
+console.log(caseInsensitiveSearch('JavaScript Exercises', 'exercises'));
