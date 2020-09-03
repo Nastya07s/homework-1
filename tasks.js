@@ -25,4 +25,14 @@ function caseInsensitiveSearch(text, searchText) {
   return text.search(regExp) === -1 ? 'Not Matched' : 'Matched';
 }
 
-console.log(caseInsensitiveSearch('JavaScript Exercises', 'exercises'));
+function transformObject(object) {
+  const keys = Object.keys(object);
+  const result = {};
+  keys.forEach((key) => {
+    const value = object[key];
+    result[value] = key;
+  });
+  return result;
+}
+
+console.log(transformObject({red: "#FF0000", green: "#00FF00", white: "#FFFFFF"}));
