@@ -79,14 +79,63 @@ function returnPromiseAfterDelay() {
 
 function resolveSeriesPromises(array) {
   const log = (result) => console.log(result);
-  array.reduce((acc, promise) => acc.then(() => promise.then(log)), Promise.resolve());
+  array.reduce(
+    (acc, promise) => acc.then(() => promise.then(log)),
+    Promise.resolve()
+  );
 }
 
-resolveSeriesPromises([
-  new Promise((resolve) => {
-    setTimeout(resolve.bind(this, 1), 1000);
-  }),
-  new Promise((resolve) => {
-    setTimeout(resolve.bind(this, 6), 6000);
-  }),
-]);
+async function workWithPromises() {
+  const createArrayOfPromises = async (array) => {
+    const result = await array.map(async (city) => {
+      const res = await fetch(
+        `http://geocode.xyz/${city}?json=1&auth=681341605353902759872x127584`
+      );
+      const data = await res.json();
+      return data;
+    });
+    return result;
+  };
+
+  let sities = ['Minsk', 'Madrid', 'Rome'];
+  let arrayOfPromises = await createArrayOfPromises(sities);
+
+  let sitiesData = await Promise.all(arrayOfPromises);
+  sitiesData.forEach(({ standard: { city, countryname } }) => {
+    console.log(`${city} - ${countryname}`);
+  });
+
+  console.log('----------------------------------------');
+
+  sities = ['Paris', 'Nice'];
+  arrayOfPromises = await createArrayOfPromises(sities);
+
+  const {
+    standard: { city, countryname },
+  } = await Promise.race(arrayOfPromises);
+  console.log(`${city} - ${countryname}`);
+
+  console.log('----------------------------------------');
+
+  sities = ['Moscow', 'Berlin', 'Paris'];
+
+  const promise = new Promise((resolve) => {
+    setTimeout(resolve.bind(this, sities), 3000);
+  });
+
+  arrayOfPromises = [];
+  promise
+    .then(async (sities) => {
+      console.log('sities: ', sities);
+      arrayOfPromises = await createArrayOfPromises(sities);
+    })
+    .then(async () => {
+      sitiesData = await Promise.all(arrayOfPromises);
+
+      sitiesData.forEach(({ standard: { city, countryname } }) => {
+        console.log(`${city} - ${countryname}`);
+      });
+    });
+}
+
+workWithPromises();
