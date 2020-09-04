@@ -46,7 +46,7 @@ function uncamelize(string, separator = ' ') {
     if (charCode > 64 && charCode < 91) {
       result += separator + String.fromCharCode(charCode + 32);
     } else result += char;
-  })
+  });
   return result;
 }
 
@@ -55,4 +55,15 @@ function countOccurrence(string, substring) {
   return string.match(regExp).length;
 }
 
-console.log(countOccurrence('This is a string.', 'is'));
+function makeFlatAndSort(array) {
+  const flattenDeep = (arr) => {
+    return arr.reduce(
+      (acc, val) =>
+        Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val),
+      []
+    );
+  }
+  return flattenDeep(array).sort((a, b) => a - b);
+}
+
+console.log(makeFlatAndSort([1, 2, 1000, 300, [400, [3, 10, [11, 12]], [1, 2, [3, 4]], 5, 6]]));
