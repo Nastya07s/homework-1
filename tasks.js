@@ -66,4 +66,9 @@ function makeFlatAndSort(array) {
   return flattenDeep(array).sort((a, b) => a - b);
 }
 
-console.log(makeFlatAndSort([1, 2, 1000, 300, [400, [3, 10, [11, 12]], [1, 2, [3, 4]], 5, 6]]));
+function deleteNullAndUndefined(array, callback) {
+  const newArray = array.filter(Boolean);
+  setTimeout(callback.bind(this, newArray), 5000);
+}
+
+deleteNullAndUndefined([1, null, 2, 3, undefined, 5], (newArray) => console.log(newArray));
