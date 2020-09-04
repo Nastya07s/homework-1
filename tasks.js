@@ -50,4 +50,9 @@ function uncamelize(string, separator = ' ') {
   return result;
 }
 
-console.log(uncamelize('helloWorld','_'));
+function countOccurrence(string, substring) {
+  const regExp = new RegExp(substring, 'g');
+  return string.match(regExp).length;
+}
+
+console.log(countOccurrence('This is a string.', 'is'));
