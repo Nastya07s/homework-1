@@ -71,4 +71,10 @@ function deleteNullAndUndefined(array, callback) {
   setTimeout(callback.bind(this, newArray), 5000);
 }
 
-deleteNullAndUndefined([1, null, 2, 3, undefined, 5], (newArray) => console.log(newArray));
+function returnPromiseAfterDelay() {
+  return new Promise((resolve) => {
+    setTimeout(resolve, 6000);
+  })
+}
+
+returnPromiseAfterDelay().then(() => console.log('After 6 seconds'));
