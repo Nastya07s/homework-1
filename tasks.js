@@ -62,7 +62,7 @@ function makeFlatAndSort(array) {
         Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val),
       []
     );
-  }
+  };
   return flattenDeep(array).sort((a, b) => a - b);
 }
 
@@ -74,7 +74,19 @@ function deleteNullAndUndefined(array, callback) {
 function returnPromiseAfterDelay() {
   return new Promise((resolve) => {
     setTimeout(resolve, 6000);
-  })
+  });
 }
 
-returnPromiseAfterDelay().then(() => console.log('After 6 seconds'));
+function resolveSeriesPromises(array) {
+  const log = (result) => console.log(result);
+  array.reduce((acc, promise) => acc.then(() => promise.then(log)), Promise.resolve());
+}
+
+resolveSeriesPromises([
+  new Promise((resolve) => {
+    setTimeout(resolve.bind(this, 1), 1000);
+  }),
+  new Promise((resolve) => {
+    setTimeout(resolve.bind(this, 6), 6000);
+  }),
+]);
