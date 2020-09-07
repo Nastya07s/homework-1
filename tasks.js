@@ -1,14 +1,21 @@
 function fibonacci(endNumber) {
-  if (endNumber === 0) return [];
+  if (endNumber < 0) return 'Число не должно быть меньше 0';
+  if (endNumber === 0) return 0;
+  if (endNumber === 1) return 1;
   const numsFibonacci = [0, 1];
-  while (numsFibonacci[numsFibonacci.length - 1] !== endNumber) {
+  while (numsFibonacci[numsFibonacci.length - 1] < endNumber) {
     const addend1 = numsFibonacci[numsFibonacci.length - 1];
     const addend2 = numsFibonacci[numsFibonacci.length - 2];
-    numsFibonacci.push(addend1 + addend2);
+    const nextNumber = addend1 + addend2;
+
+    if (nextNumber >= endNumber) break;
+
+    numsFibonacci.push(nextNumber);
   }
-  numsFibonacci.pop();
   return numsFibonacci;
 }
+
+console.log(fibonacci(9));
 
 function difference(firstArray, secondArray) {
   const union = (setA, setB) => {
@@ -138,4 +145,4 @@ async function workWithPromises() {
     });
 }
 
-workWithPromises();
+// workWithPromises();
