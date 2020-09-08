@@ -35,8 +35,6 @@ function difference1(firstArray, secondArray) {
   return result;
 }
 
-console.log(difference1([1, 2, 3, 4, 5], [1, [2], [3, [[4]]],[5,6]]));
-
 function caseInsensitiveSearch(text, searchText) {
   const regExp = new RegExp(searchText, 'i');
   return text.search(regExp) === -1 ? 'Not Matched' : 'Matched';
@@ -44,13 +42,15 @@ function caseInsensitiveSearch(text, searchText) {
 
 function transformObject(object) {
   const keys = Object.keys(object);
-  const result = {};
+  const result = new Map();
   keys.forEach((key) => {
     const value = object[key];
-    result[value] = key;
+    result.set(value, key)
   });
   return result;
 }
+
+console.log(transformObject({ key: { key: 3 } }));
 
 function createPairsFromObject(object) {
   return Object.entries(object);
