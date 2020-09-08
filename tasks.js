@@ -15,8 +15,6 @@ function fibonacci(endNumber) {
   return numsFibonacci;
 }
 
-console.log(fibonacci(9));
-
 function difference(firstArray, secondArray) {
   const union = (setA, setB) => {
     setB.forEach((el) => setA.add(el));
@@ -24,8 +22,20 @@ function difference(firstArray, secondArray) {
   };
   const setA = new Set(firstArray.flat(Infinity));
   const setB = new Set(secondArray.flat(Infinity));
-  return union(setA, setB);
+  return [...union(setA, setB)];
 }
+
+function difference1(firstArray, secondArray) {
+  const newFirstArray = firstArray.flat(Infinity);
+  const newSecondArray = secondArray.flat(Infinity);
+  const result = [...newFirstArray];
+  newSecondArray.forEach((el) => {
+    if (!newFirstArray.includes(el)) result.push(el);
+  });
+  return result;
+}
+
+console.log(difference1([1, 2, 3, 4, 5], [1, [2], [3, [[4]]],[5,6]]));
 
 function caseInsensitiveSearch(text, searchText) {
   const regExp = new RegExp(searchText, 'i');
