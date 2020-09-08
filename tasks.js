@@ -45,7 +45,7 @@ function transformObject(object) {
   const result = new Map();
   keys.forEach((key) => {
     const value = object[key];
-    result.set(value, key)
+    result.set(value, key);
   });
   return result;
 }
@@ -66,13 +66,12 @@ function uncamelize(string, separator = ' ') {
 
     if (charCode >= lastLetterCharCode) return 'Неверные данные';
 
-    if (charCode >= charCodeA && charCode <= charCodeZ) result += separator + String.fromCharCode(charCode + 32);
+    if (charCode >= charCodeA && charCode <= charCodeZ)
+      result += separator + String.fromCharCode(charCode + 32);
     else result += char;
-  };
+  }
   return result;
 }
-
-console.log(uncamelize('helloWorld','_'));
 
 function countOccurrence(string, substring) {
   const regExp = new RegExp(substring, 'g');
@@ -112,54 +111,69 @@ function resolveSeriesPromises(array) {
 async function workWithPromises() {
   const createArrayOfPromises = async (array) => {
     const result = await array.map(async (city) => {
-      const res = await fetch(
+      const res = fetch(
         `http://geocode.xyz/${city}?json=1&auth=681341605353902759872x127584`
       );
-      const data = await res.json();
-      return data;
+      return (await res).json();
     });
     return result;
   };
 
-  let sities = ['Minsk', 'Madrid', 'Rome'];
-  let arrayOfPromises = await createArrayOfPromises(sities);
+  const sendParallelRequests = async () => {
+    const sities = ['Minsk', 'Madrid', 'Rome'];
+    const arrayOfPromises = await createArrayOfPromises(sities);
+    try {
+      let sitiesData = await Promise.all(arrayOfPromises);
 
-  let sitiesData = await Promise.all(arrayOfPromises);
-  sitiesData.forEach(({ standard: { city, countryname } }) => {
-    console.log(`${city} - ${countryname}`);
-  });
+      sitiesData.forEach(({ standard: { city, countryname } }) => {
+        console.log(`${city} - ${countryname}`);
+      });
+    } catch (e) {
+      console.log(e);
+    }
 
-  console.log('----------------------------------------');
+    console.log('----------------------------------------');
+  };
 
-  sities = ['Paris', 'Nice'];
-  arrayOfPromises = await createArrayOfPromises(sities);
+  const sendRequestPromiseRace = async () => {
+    const sities = ['Paris', 'Nice'];
+    const arrayOfPromises = await createArrayOfPromises(sities);
+    try {
+      const {
+        standard: { city, countryname },
+      } = await Promise.race(arrayOfPromises);
+      console.log(`${city} - ${countryname}`);
+    } catch (e) {
+      console.log(e);
+    }
+    console.log('----------------------------------------');
+  };
 
-  const {
-    standard: { city, countryname },
-  } = await Promise.race(arrayOfPromises);
-  console.log(`${city} - ${countryname}`);
+  const sendRequestWithDelay = async () => {
+    const sities = ['Moscow', 'Berlin', 'Paris'];
 
-  console.log('----------------------------------------');
+    const promise = new Promise((resolve) => {
+      setTimeout(resolve.bind(this, sities), 3000);
+    });
 
-  sities = ['Moscow', 'Berlin', 'Paris'];
-
-  const promise = new Promise((resolve) => {
-    setTimeout(resolve.bind(this, sities), 3000);
-  });
-
-  arrayOfPromises = [];
-  promise
-    .then(async (sities) => {
+    const arrayOfPromises = [];
+    try {
+      sities = await promise;
       console.log('sities: ', sities);
       arrayOfPromises = await createArrayOfPromises(sities);
-    })
-    .then(async () => {
       sitiesData = await Promise.all(arrayOfPromises);
 
       sitiesData.forEach(({ standard: { city, countryname } }) => {
         console.log(`${city} - ${countryname}`);
       });
-    });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  await sendParallelRequests();
+  await sendRequestPromiseRace();
+  await sendRequestWithDelay();
 }
 
-// workWithPromises();
+workWithPromises();
