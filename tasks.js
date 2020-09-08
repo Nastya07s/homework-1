@@ -50,22 +50,29 @@ function transformObject(object) {
   return result;
 }
 
-console.log(transformObject({ key: { key: 3 } }));
-
 function createPairsFromObject(object) {
   return Object.entries(object);
 }
 
 function uncamelize(string, separator = ' ') {
+  const charCodeA = 65;
+  const charCodeZ = 90;
+  const lastLetterCharCode = 122;
+  const arrayOfChars = string.split('');
+
   let result = '';
-  string.split('').forEach((char) => {
+  for (const char of arrayOfChars) {
     const charCode = char.charCodeAt();
-    if (charCode > 64 && charCode < 91) {
-      result += separator + String.fromCharCode(charCode + 32);
-    } else result += char;
-  });
+
+    if (charCode >= lastLetterCharCode) return 'Неверные данные';
+
+    if (charCode >= charCodeA && charCode <= charCodeZ) result += separator + String.fromCharCode(charCode + 32);
+    else result += char;
+  };
   return result;
 }
+
+console.log(uncamelize('helloWorld','_'));
 
 function countOccurrence(string, substring) {
   const regExp = new RegExp(substring, 'g');
